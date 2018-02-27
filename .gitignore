@@ -27,3 +27,5 @@
 *.i*86
 *.x86_64
 *.hex
+.vscode/c_cpp_properties.json
+.vscode/settings.json
