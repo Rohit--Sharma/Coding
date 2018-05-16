@@ -13,8 +13,10 @@ bool containsNearbyDuplicate(vector<int>& nums, int k)
         if (m.find(nums.at(i)) == m.end())
             m[nums.at(i)] = i;
         else
-            if (i - m[nums.at(i)] > k)
+            if (i - m[nums.at(i)] >= k)
                 return true;
+            else
+                m[nums.at(i)] = i;
 
     return false;
 }
