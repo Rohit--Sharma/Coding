@@ -9,4 +9,6 @@ int missingNumber(vector<int>& nums)
     for (int n : nums)
         sum += n;
     
+    int size = nums.size();
+    return size * (size + 1) / 2 - sum;
 }
