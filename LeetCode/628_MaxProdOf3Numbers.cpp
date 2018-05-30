@@ -10,6 +10,7 @@ bool minimum(int a, int b)
     return a > b;
 }
 
+/// Also solvable in single scan
 int maximumProduct(vector<int>& nums)
 {
     vector<int> maxHeap = nums, minHeap = nums;
