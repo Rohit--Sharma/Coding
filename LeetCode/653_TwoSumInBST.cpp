@@ -14,6 +14,8 @@ struct TreeNode {
 
 class Solution {
 public:
+    /// Not using the property that the tree is a BST. 
+    ///    Another approach is to do an inorder traversal to find a sorted list and then do Binary Search to find the result
     bool findTarget(TreeNode* root, int k) {
         if (root == NULL)
             return false;
