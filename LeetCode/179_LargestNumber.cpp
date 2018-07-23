@@ -7,7 +7,7 @@ using namespace std;
 
 bool comparator(string a, string b)
 {
-    return (b + a).compare(a + b);
+    return (b + a).compare(a + b) < 0;
 }
 
 class Solution {
@@ -38,5 +38,6 @@ int main()
 
     input = vector<int> {3, 30, 34, 5, 9};
     cout << Solution().largestNumber(input) << endl;
+
     return 0;
 }
