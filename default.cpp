@@ -6,6 +6,7 @@
 #include <stack>
 #include <map>
 #include <queue>
+#include <list>
 #include <algorithm>
 
 using namespace std;
