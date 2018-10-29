@@ -68,6 +68,43 @@ private:
 	};
 };
 
+// Another approach
+class Solution_II {
+public:
+    vector<vector<Interval>> rooms;
+    
+    int minMeetingRooms(vector<Interval>& intervals) {
+        sort(intervals.begin(), intervals.end(), [](const Interval a, const Interval b){
+            return a.start < b.start;
+        });
+        
+        for (Interval interval : intervals)
+        {
+            AddMeeting(interval);
+        }
+        return rooms.size();
+    }
+    
+    void AddMeeting(Interval interval)
+    {
+        
+        for (int i = 0; i < rooms.size(); i++)
+        {
+            if (isValid(interval, rooms[i])) return;
+        }
+        
+        rooms.push_back({interval});
+    }
+    
+    bool isValid(Interval interval, vector<Interval> &room)
+    {
+        Interval roomInterval = room.back();
+        if (interval.start < roomInterval.end) return false;
+        room.push_back(interval);
+        return true;
+    }
+};
+
 int main() {
     vector<Interval> intervals;
 
