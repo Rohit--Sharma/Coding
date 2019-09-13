@@ -32,62 +32,30 @@ struct TreeNode {
 class Solution {
 public:
 	vector<string> reorderLogFiles(vector<string>& logs) {
-		sort(logs.begin(), logs.end(), comparator);
+		//The order of equal elements is guaranteed to be preserved in stable_sort.
+		//Use sort() cannot pass the OJ. 
+		stable_sort(logs.begin(), logs.end(), myCompare);
 		return logs;
 	}
 
 private:
-	static bool is_digit_log(string word) {
-		for(char ch: word)
-			if(ch < '0' || ch > '9')
-				return false;
-		return true;
-	}
-
-	static bool comparator(string log1, string log2) {
-		vector<string> log1_tokens = split(log1, ' ');
-		vector<string> log2_tokens = split(log2, ' ');
-
-		bool is_log1_digit = is_digit_log(log1_tokens[1]);
-		bool is_log2_digit = is_digit_log(log2_tokens[1]);
-
-		if((is_log1_digit && is_log2_digit) || is_log2_digit) {
-			return true;
-		} else if(is_log1_digit) {
-			return false;
-		} else {
-			string log1_less_id, log2_less_id;
-
-			for(int i = 1; i < log1_tokens.size(); i++) {
-				log1_less_id += log1_tokens[i];
+	static bool myCompare(string a, string b){
+		int i = a.find(' ');
+		int j = b.find(' ');
+		if(isdigit(a[i + 1]))
+			if(isdigit(b[j + 1]))
+				return false;	   // a b are both digit logs, a == b, keep their original order
+			else
+				return false;	   // a is digit log, b is letter log, a > b
+		else
+			if(isdigit(b[j + 1]))
+				return true;		// a is letter log, b is digit log, a < b
+			else {
+				if (a.substr(i) == b.substr(j))
+					return a.substr(0,i) < b.substr(0,j); //If string part is the same, compare key
+				else
+					return a.substr(i) < b.substr(j);   // a and b are both letter
 			}
-			for(int i = 1; i < log2_tokens.size(); i++) {
-				log2_less_id += log2_tokens[i];
-			}
-			cout << log1_less_id << " " << log2_less_id << ' ';
-
-			if(log1_less_id.compare(log2_less_id) == 0) {
-				cout << log2.compare(log1) << endl;
-				return log2.compare(log1);
-			} else {
-				cout << log2_less_id.compare(log1_less_id) << endl;
-				return log2_less_id.compare(log1_less_id);
-			}
-		}
-	}
-
-	template<typename Out>
-	static void split(string& s, char delim, Out result) {
-		stringstream ss(s);
-		string item;
-		while(getline(ss, item, delim))
-			*(result++) = item;
-	}
-
-	static vector<string> split(string& s, char delim) {
-		vector<string> tokens;
-		split(s, delim, back_inserter(tokens));
-		return tokens;
 	}
 };
 
