@@ -30,6 +30,7 @@ struct TreeNode {
 
 class Solution {
 public:
+    // O(n^2) time complexity, O(1) space complexity
     int subarraySum(vector<int>& nums, int k) {
         int res = 0;
 
@@ -39,10 +40,6 @@ public:
                 curr_sum += nums[j];
                 if(curr_sum == k) {
                     res++;
-                    break;
-                }
-                else if (curr_sum > k) {
-                    break;
                 }
             }
         }
