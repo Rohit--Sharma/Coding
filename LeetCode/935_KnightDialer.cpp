@@ -30,36 +30,37 @@ struct TreeNode {
 
 class Solution {
 public:
+    // Bottom up DP
+    // Time complexity: O(n), Space complexity: O(1)
     int knightDialer(int N) {
-        vector<vector<int>> numHops(10, vector<int>(N + 1, -1));
+        int MOD = 1000000007;
 
-        int res = 0;
-        for(int i = 0; i < 10; i++) {
-            res += dp(numHops, i, N) % 1000000007;
+        // dp for only two previous n values to optimize space.
+        //   use bitwise operations to access values in each iter
+        int dp[2][10];
+        for(int i = 0; i < 10; i++)
+            dp[0][i] = 1;
+        
+        for(int hop = 0; hop < N - 1; hop++) {
+            for(int i = 0; i < 10; i++)
+                dp[~hop & 1][i] = 0;
+            
+            for(int i = 0; i < 10; i++) {
+                for(int next: moves[i]) {
+                    dp[~hop & 1][next] += dp[hop & 1][i];
+                    dp[~hop & 1][next] %= MOD;
+                }
+            }
         }
 
-        return res;
+        long ans = 0;
+        for(int nhops: dp[~N & 1])
+            ans += nhops;
+        return ans % MOD;
     }
 
 private:
     vector<vector<int>> moves {{4, 6}, {6, 8}, {7, 9}, {4, 8}, {3, 9, 0}, {}, {1, 7, 0}, {2, 6}, {1, 3}, {4, 2}};
-
-    int dp(vector<vector<int>>& numHops, int start, int N) {
-        // cout << "dp(" << start << ", " << N << ")\n";
-        if(numHops[start][N] > 0)
-            return numHops[start][N];
-        if(N == 1) {
-            numHops[start][N] = 1;
-            return 1;
-        }
-
-        int res = 0;
-        for(int next: moves[start]) {
-            res += dp(numHops, next, N - 1) % 1000000007;
-        }
-        numHops[start][N] = res;
-        return res;
-    }
 };
 
 int main() {
@@ -68,7 +69,7 @@ int main() {
 
     cout << "2: " << Solution().knightDialer(2) << endl;
 
-    cout << "500: " << Solution().knightDialer(500) << endl;
+    cout << "5000: " << Solution().knightDialer(5000) << endl;
 
     return 0;
 }
