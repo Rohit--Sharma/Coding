@@ -33,50 +33,31 @@ struct TreeNode {
 class Solution {
 public:
     vector<int> findSubstring(string s, vector<string>& words) {
-        vector<int> result;
-
-        size_t n_words = words.size();
-        if(n_words == 0)
-            return result;
-
-        size_t len = words[0].size();
-
-        for(string word: words)
-            word_counts[word]++;
-
-        for(int i = 0; i < s.size(); i++) {
-            cout << "i: " << i << endl;
-            string curr = s.substr(i, len);
-            if(word_counts.find(curr) != word_counts.end()) {
-                unordered_map<string, int> word_cts_copy(word_counts);
-                int n = n_words;
-                int j = i;
-
-                string w = curr;
-                bool found = true;
-                while(word_cts_copy.find(w) != word_cts_copy.end()) {
-                    cout << w << " ";
-                    word_cts_copy[w]--;
-                    if(word_cts_copy[w] < 0) {
-                        found = false;
+        unordered_map<string, int> counts;
+        for (string word : words)
+            counts[word]++;
+        int n = s.length(), num = words.size(), len = words[0].length();
+        vector<int> indexes;
+        for (int i = 0; i < n - num * len + 1; i++)
+        {
+            unordered_map<string, int> seen;
+            int j = 0;
+            for (; j < num; j++)
+            {
+                string word = s.substr(i + j * len, len);
+                if (counts.find(word) != counts.end())
+                {
+                    seen[word]++;
+                    if (seen[word] > counts[word])
                         break;
-                    }
-
-                    n--;
-                    if(n == 0)
-                        break;
-
-                    j += len;
-                    w = s.substr(j, len);
                 }
-                cout << endl;
-
-                if(n == 0 && found)
-                    result.push_back(i);
+                else
+                    break;
             }
+            if (j == num)
+                indexes.push_back(i);
         }
-
-        return result;
+        return indexes;
     }
 
 private:
